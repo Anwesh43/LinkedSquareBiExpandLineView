@@ -37,11 +37,11 @@ fun Canvas.drawSquareExpandLine(i : Int, sc : Float, size : Float, paint : Paint
     val x : Float = size / 2 * sc.divideScale(i, squares) * (1f - 2 * i)
     save()
     translate(x, 0f)
-    drawRect(RectF(0f, -size / 2, size, size / 2), paint)
+    drawRect(RectF(0f, -size / 4, size / 2, size / 4), paint)
     restore()
     for (j in 0..(lines - 1)) {
         save()
-        translate(0f, -size / 2 + size * j)
+        translate(0f, -size / 4 + (size / 2) * j)
         drawLine(0f, 0f, x, 0f, paint)
         restore()
     }
@@ -57,7 +57,7 @@ fun Canvas.drawSBENode(i : Int, scale : Float, paint : Paint) {
     paint.color = foreColor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
-    paint.style = Paint.Style.STROKE 
+    paint.style = Paint.Style.STROKE
     save()
     translate(w / 2, gap * (i + 1))
     rotate(90f * sc2)
