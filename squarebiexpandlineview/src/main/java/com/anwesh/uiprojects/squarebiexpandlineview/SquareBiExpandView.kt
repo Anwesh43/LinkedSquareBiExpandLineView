@@ -197,4 +197,25 @@ class SquareBiExpandLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SquareBiExpandLineView) {
+
+        private val animator : Animator = Animator(view)
+        private val sbe : SquareBiExpandLine = SquareBiExpandLine(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            animator.animate {
+                sbe.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            sbe.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
