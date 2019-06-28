@@ -219,4 +219,13 @@ class SquareBiExpandLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : SquareBiExpandLineView {
+            val view : SquareBiExpandLineView = SquareBiExpandLineView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
