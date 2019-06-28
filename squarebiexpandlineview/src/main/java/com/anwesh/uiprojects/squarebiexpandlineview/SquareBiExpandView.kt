@@ -28,7 +28,7 @@ fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.mirrorValue(a : Int, b : Int) : Float {
-    val k : Float = mirrorValue(a, b)
+    val k : Float = scaleFactor()
     return (1 - k) * a.inverse() + k * b.inverse()
 }
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
@@ -57,8 +57,10 @@ fun Canvas.drawSBENode(i : Int, scale : Float, paint : Paint) {
     paint.color = foreColor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
+    paint.style = Paint.Style.STROKE 
     save()
     translate(w / 2, gap * (i + 1))
+    rotate(90f * sc2)
     for (j in (0..squares - 1)) {
         drawSquareExpandLine(j, sc1, size, paint)
     }
@@ -206,6 +208,7 @@ class SquareBiExpandLineView(ctx : Context) : View(ctx) {
 
         fun render(canvas : Canvas, paint : Paint) {
             canvas.drawColor(backColor)
+            sbe.draw(canvas, paint)
             animator.animate {
                 sbe.update {i, scl ->
                     animator.stop()
@@ -225,7 +228,7 @@ class SquareBiExpandLineView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : SquareBiExpandLineView {
             val view : SquareBiExpandLineView = SquareBiExpandLineView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
