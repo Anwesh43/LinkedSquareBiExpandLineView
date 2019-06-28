@@ -14,7 +14,8 @@ import android.app.Activity
 import android.content.Context
 
 val nodes : Int = 5
-val square : Int = 4
+val squares : Int = 2
+val lines : Int = 2
 val scGap : Float = 0.05f
 val scDiv : Double = 0.51
 val strokeFactor : Int = 90
@@ -31,3 +32,35 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
     return (1 - k) * a.inverse() + k * b.inverse()
 }
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+
+fun Canvas.drawSquareExpandLine(i : Int, sc : Float, size : Float, paint : Paint) {
+    val x : Float = size / 2 * sc.divideScale(i, squares) * (1f - 2 * i)
+    save()
+    translate(x, 0f)
+    drawRect(RectF(0f, -size / 2, size, size / 2), paint)
+    restore()
+    for (j in 0..(lines - 1)) {
+        save()
+        translate(0f, -size / 2 + size * j)
+        drawLine(0f, 0f, x, 0f, paint)
+        restore()
+    }
+}
+
+fun Canvas.drawSBENode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    paint.color = foreColor
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.strokeCap = Paint.Cap.ROUND
+    save()
+    translate(w / 2, gap * (i + 1))
+    for (j in (0..squares - 1)) {
+        drawSquareExpandLine(j, sc1, size, paint)
+    }
+    restore()
+}
